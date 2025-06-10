@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Languages | Gamify{% endblock %}
+
+{% block content %}
+<h2 class="text-2xl font-semibold mb-4">Pick a Language</h2>
+
+<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+  {% for lang, count in languages.items %}
+    <a href="{% url 'all_projects' lang %}" class="bg-gray-700 hover:bg-gray-600 p-4 rounded-lg text-center flex flex-col items-center space-y-2">
+      <span class="text-4xl">
+        {% if lang|lower == "python" %}
+          <i class="fab fa-python text-blue-600"></i>
+        {% elif lang|lower == "javascript" %}
+          <i class="fab fa-js-square text-yellow-300"></i>
+        {% elif lang|lower == "java" %}
+          <i class="fab fa-java text-stone-900"></i>
+        {% elif lang|lower == "c" %}
+          <i class="fas fa-c text-slate-500"></i>
+        {% elif lang|lower == "c++" or lang|lower == "cpp" %}
+          <i class="fas fa-code text-blue-300"></i>
+        {% elif lang|lower == "c#" %}
+          <i class="fas fa-code text-emerald-600"></i>
+        {% elif lang|lower == "html" %}
+          <i class="fab fa-html5 text-orange-400"></i>
+        {% elif lang|lower == "css" %}
+          <i class="fab fa-css3-alt text-blue-300"></i>
+        {% elif lang|lower == "php" %}
+          <i class="fab fa-php text-indigo-400"></i>
+        {% elif lang|lower == "go" %}
+          <i class="fa-brands fa-golang text-sky-500"></i> 
+        {% elif lang|lower == "rust" %}
+          <i class="fa-brands fa-rust text-orange-600"></i>
+        {% elif lang|lower == "ruby" %}
+          <i class="fa-solid fa-gem text-red-600"></i>
+        {% elif lang|lower == "dart" %}
+          <i class="fa-brands fa-dart-lang text-blue-400"></i>
+        {% elif lang|lower == "kotlin" %}
+          <i class="fa-solid fa-k text-fuchsia-600"></i>
+        {% elif lang|lower == "lua" %}
+          <i class="fa-solid fa-circle-notch text-blue-700"></i>
+        {% elif lang|lower == "swift" %}
+          <i class="fa-brands fa-swift text-orange-500"></i>
+        {% elif lang|lower == "ruby" %}
+          <i class="fa-solid fa-gem text-red-600"></i>
+        {% else %}
+          <i class="fas fa-code text-gray-400"></i>
+        {% endif %}
+      </span>
+      <span class="text-lg font-semibold">{{ lang }}</span>
+      <span class="text-sm text-gray-400">{{ count }} project{{ count|pluralize }}</span>
+    </a>
+  {% empty %}
+    <p>No languages available yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}

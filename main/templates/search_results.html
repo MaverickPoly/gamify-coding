@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Search Results | Gamify{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+  <form action="{% url 'search_results' %}" method="get" class="flex flex-wrap gap-2">
+    <input type="text" name="query" placeholder="Search…" value="{{ query }}"
+           class="flex-1 px-3 py-2 bg-gray-700 rounded focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+    <select name="lang" class="px-3 py-2 bg-gray-700 rounded">
+      <option value="">All Languages</option>
+      {% for option in languages %}
+        <option value="{{ option }}" {% if option == language %}selected{% endif %}>{{ option }}</option>
+      {% endfor %}
+    </select>
+
+    <select name="difficulty" class="px-3 py-2 bg-gray-700 rounded">
+      <option value="">All Difficulties</option>
+      {% for code,label in project.DIFFICULTY_CHOICES %}
+        <option value="{{ code }}" {% if code == difficulty %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+
+    <select name="category" class="px-3 py-2 bg-gray-700 rounded">
+      <option value="">All Categories</option>
+      {% for code,label in project.FIELD_CHOICES %}
+        <option value="{{ code }}" {% if code == category %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+
+    <button type="submit" class="px-4 py-2 bg-indigo-600 rounded hover:bg-indigo-500">
+      Search
+    </button>
+  </form>
+</div>
+{% if page_obj %}
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+  {% for project in page_obj %}
+    <div class="p-4 rounded-lg border
+      {% if project.id in completed_ids %}
+        bg-green-600 border-green-400
+      {% else %}
+        bg-gray-700 hover:bg-gray-600 border-gray-600
+      {% endif %}
+    ">
+      <div class="flex justify-between items-center">
+        <div class="flex flex-col">
+          <a href="{% url 'project_detail' project.id %}" class="font-medium">
+            {{ project.title }}
+          </a>
+          {% for code,label in project.FIELD_CHOICES %}
+            {% if code == project.field %}
+              <span class="text-sky-400">{{label}}</span>
+            {% endif %}
+          {% endfor %}
+          <a class="font-bold text-indigo-400" href="{% url 'all_projects' language=project.programming_language %}">{{project.programming_language}}</a>
+        </div>
+        <span class="text-xs px-2 py-1 rounded-full bg-indigo-500">
+          {{ project.get_difficulty_display }}
+        </span>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<!-- Pagination Controls -->
+<div class="mt-6 flex justify-center space-x-2">
+  {% with querystring=request.GET.urlencode %}
+    {% if page_obj.has_previous %}
+      <a href="?{{ querystring }}&page={{ page_obj.previous_page_number }}"
+         class="px-3 py-1 bg-gray-600 rounded hover:bg-gray-500">Previous</a>
+    {% endif %}
+
+    <span class="px-3 py-1 bg-gray-700 rounded">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+    {% if page_obj.has_next %}
+      <a href="?{{ querystring }}&page={{ page_obj.next_page_number }}"
+         class="px-3 py-1 bg-gray-600 rounded hover:bg-gray-500">Next</a>
+    {% endif %}
+  {% endwith %}
+</div>
+
+{% else %}
+  <p>No matching projects found.</p>
+{% endif %}
+
+{% endblock %}

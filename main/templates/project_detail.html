@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}{{ project.title }} | Gamify{% endblock %}
+{% block content %}
+<div class="bg-gray-800 rounded-lg shadow-lg p-6">
+  <h1 class="text-3xl font-bold mb-2">{{ project.title }}</h1>
+  <p class="text-gray-300 mb-4">{{ project.description }}</p>
+  <p><strong>Language:</strong> {{ project.programming_language }}</p>
+  <p><strong>Difficulty:</strong> {{ project.get_difficulty_display }}</p>
+  <p><strong>Category:</strong> {{ project.get_field_display }}</p>
+
+  {% if is_completed %}
+    <p class="mt-4 text-green-400 font-semibold">
+      <i class="fas fa-check-circle"></i> Completed
+    </p>
+  {% else %}
+    <a href="{% url 'complete_project' project.id %}"
+       class="inline-block mt-4 px-4 py-2 bg-indigo-600 rounded hover:bg-indigo-500">
+      Mark as Completed
+    </a>
+  {% endif %}
+</div>
+{% endblock %}

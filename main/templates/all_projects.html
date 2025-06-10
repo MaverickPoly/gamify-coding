@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}{{ projects.0.programming_language }} Projects | Gamify{% endblock %}
+
+{% block content %}
+<h2 class="text-2xl font-semibold mb-6">
+  Projects in {{ projects.0.programming_language }}:
+</h2>
+
+{% if projects %}
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+  {% for project in projects %}
+    <div class="
+      p-4 rounded-lg border 
+      {% if project.id in completed_ids %}
+        bg-green-600 border-green-400
+      {% else %}
+        bg-gray-700 hover:bg-gray-600 border-gray-600
+      {% endif %}
+    ">
+      <div class="flex justify-between items-center">
+        <div class="flex flex-col">
+          <a href="{% url 'project_detail' project.id %}" class="font-medium">
+            {{ project.title }}
+          </a>
+          {% for code,label in project.FIELD_CHOICES %}
+            {% if code == project.field %}
+              <span class="text-sky-400">{{label}}</span>
+            {% endif %}
+          {% endfor %}
+        </div>
+        <span class="text-xs px-2 py-1 rounded-full bg-indigo-500">
+          {{ project.get_difficulty_display }}
+        </span>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% else %}
+  <p>No projects found in this language.</p>
+{% endif %}
+{% endblock %}
