@@ -13,9 +13,9 @@ SECRET_KEY = 'do not look it up!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["https://gamify-coding.onrender.com"]
+ALLOWED_HOSTS = ["*"]
 
-CSRF_TRUSTED_ORIGINS = ["https://gamify-coding.onrender.com"]
+CSRF_TRUSTED_ORIGINS = ["*"]
 
 
 # Application definition
